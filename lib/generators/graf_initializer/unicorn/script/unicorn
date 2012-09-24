@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+
+class UnicornScript
+  def initialize(command)
+    if command == "start"
+      start
+    elsif command == "restart"
+      stop
+      sleep(3)
+      start
+    elsif command == "hup"
+      if started?
+        if system("kill -HUP #{pid}")
+          puts "unicorn: process with pid #{pid} huped."
+        else
+          puts "unicorn: process with pid #{pid} [error] don't huped."
+        end
+      else
+        puts "unicorn: unicorn not started."
+      end
+    elsif command == "stop"
+      stop
+    else
+      puts "unicorn: [#{command}] is no such command."
+    end
+  end
+  def started?
+    return File.exist?("tmp/pids/unicorn.pid")
+  end
+  def pid
+    return `cat tmp/pids/unicorn.pid`.chop
+  end
+  def start
+    if started?
+      return puts "unicorn: process with pid #{pid} already started."
+    end
+    puts "unicorn: trying to start."
+    if system("unicorn_rails -c config/unicorn.rb -D")
+      puts "unicorn: process with pid #{pid} successfully started."
+    else
+      puts "unicorn: [error] wasn't start."
+    end
+  end
+  def stop
+    if !started?
+      return puts "unicorn: There is no existing process."
+    end
+    cur_pid = pid
+    puts "unicorn: trying to stop process with pid #{cur_pid}."
+    if system("kill -INT #{cur_pid}")
+      puts "unicorn: process with pid #{cur_pid} successfully stopped."
+    else
+      puts "unicorn: [error] process with pid #{cur_pid} wasn't stop."
+    end
+  end
+end
+UnicornScript.new(ARGV[0])
+exit

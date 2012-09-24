@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "graf_initializer"
   gem.homepage = "http://github.com/graf5226/graf_initializer"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{private rails generators}
+  gem.description = %Q{devise unicorn ... etc generators}
   gem.email = "graf@yahoo.co.jp"
   gem.authors = ["graf5226"]
   # dependencies defined in Gemfile
